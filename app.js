@@ -90,7 +90,6 @@ var options = {
   }
 };
 //Posts
-//user sign up post
 app.post("/userSignup", async function(req,res){        
     const userNameExists = await User.findOne({username:req.body.userName});
     const phoneNumberExists = await User.findOne({phoneNumber:req.body.phoneNumber}); 
