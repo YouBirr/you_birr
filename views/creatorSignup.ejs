@@ -1,0 +1,55 @@
+<%- include("partials/header") -%> 
+    <div class="creatorSignupContainer">
+        <form class="creatorSignupForm" action="/" method="post">
+            <h1 class="creatorSignupTitle">Signup As A Creator</h1>
+            <div class="creatorInfoContaier">
+                <div class="creatorSignupLeft">
+                    <div class="textbox">  
+                        <input type="text"  required placeholder="Full Name(grand parent)" name="fullName" value="">
+                    </div>
+                    <div class="textbox">
+                        <input type="text"  required placeholder="username"  name="userName" value="">
+                    </div>
+                    <% if(userNameTaken){ %>
+                        <p class="signup-error">username taken</p>
+                    <%} %>
+                    <div class="textbox">
+                        <input type="number" required placeholder="phonenumber"  name="phoneNumber" value="">
+                    </div>
+                    <% if(phoneNumberInvalid){ %>
+                        <p class="signup-error">Invalid phone number</p>
+                        <%} %>
+                    <% if(phoneNumberTaken){ %>
+                        <p class="signup-error">phone number is already used</p>
+                    <%} %>
+                    <div class="textbox">
+                        <input type="password"  required placeholder="password" name="password" value="">
+                    </div>
+                    <% if(passwordTooShort){ %>
+                        <p class="signup-error">password too short</p>
+                        <%} %>
+                </div> 
+                <div class="creatorSignupRight">
+                    <div class="textbox">
+                        <input type="url"   required placeholder="account link" name="youtubeAccount" value="">
+                    </div>
+                    <div class="textbox">
+                        <label for="id" class="custom-file-upload">
+                            Choose id
+                        </label>
+                        <input required id="id" type="file"/>
+                    </div>
+      
+                    <div class="textbox">
+                        <label for="image" class="custom-file-upload">
+                            Image
+                        </label>
+                        <input required id="image" type="file"/>
+                    </div>
+                </div>       
+            </div>
+            <button type="submit" class="creatorSignupBtn">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>
