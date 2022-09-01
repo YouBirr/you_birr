@@ -30,15 +30,8 @@ const CreatorSchema = new mongoose.Schema({
     profilePicture:{
         type:String,
     },
-    id:{
+    coverPicture:{
         type:String
-    },
-    image:{
-        type:String
-    },
-    account:{
-        type:Array,
-        default:[]   
     }
 }, 
 {timestamps:true}

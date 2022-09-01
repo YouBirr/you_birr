@@ -1,31 +1,33 @@
 <%- include("partials/header") -%> 
 
+<div class="userSignupWrapper">
 
-<form action="/userSignup" method="post">
-    <div class="Sign-Upbox">
-        <h1>Sign-Up</h1>
-        <div class="textbox"><input required type="text" placeholder="Username" name="userName"/></div>
-        <% if(userNameTaken){ %>
-            <p class="signup-error">username taken</p>
-        <%} %>
-        <div class="textbox">
-            <input required type="password" placeholder="password"  name="password" /></div>
-            <% if(passwordTooShort){ %>
-            <p class="signup-error">password too short</p>
+    <form action="/userSignup" method="post">
+        <div class="Sign-Upbox">
+            <h1>Sign-Up</h1>
+            <div class="textbox"><input required type="text" placeholder="Username" name="userName"/></div>
+            <% if(userNameTaken){ %>
+                <p class="signup-error">username taken</p>
             <%} %>
-        <div class="textbox">        
-            <input required type="number" placeholder="phonenumber" value=09  name="phoneNumber"/>
-        </div>
-        <% if(phoneNumberInvalid){ %>
-            <p class="signup-error">Invalid phone number</p>
+            <div class="textbox">
+                <input required type="password" placeholder="password"  name="password" /></div>
+                <% if(passwordTooShort){ %>
+                <p class="signup-error">password too short</p>
+                <%} %>
+            <div class="textbox">        
+                <input required type="number" placeholder="phonenumber" value=09  name="phoneNumber"/>
+            </div>
+            <% if(phoneNumberInvalid){ %>
+                <p class="signup-error">Invalid phone number</p>
+                <%} %>
+            <% if(phoneNumberTaken){ %>
+                <p class="signup-error">phone number is already used</p>
             <%} %>
-        <% if(phoneNumberTaken){ %>
-            <p class="signup-error">phone number is already used</p>
-        <%} %>
-        <button class="btn" type="submit">Submit</button>
- </div>
-        
-</form>
+            <button class="btn" type="submit">Submit</button>
+     </div>
+            
+    </form>
+</div>
   
 </body>
 </html>

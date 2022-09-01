@@ -9,13 +9,12 @@ body{
 }
 
 .main{
-    background:black;
+    background-color:black;
     background-size: cover;
     width: 100%;
-    background: linear-gradient(to top,rgba(0,0,0,0.5)50%,rgba(0,0,0,0.5)50%),url(images/flower.jpg);
     background-position: center;
     background-size: cover;
-    height: 109vh;
+    height: 100vh;
 }
 .navbar{
     width: 1200px;
@@ -96,10 +95,10 @@ ul li a:hover{
     display: inline-block;
     width: 100px;
     height: 40px;
-    background:yellowgreen;
-    border: 2px solid yellowgreen;
+    background:gold;
+    border: 2px solid gold;
     margin-top: 13px;
-    color: aliceblue;
+    color: black;
     font-size: 15px;
     border-bottom-right-radius: 5px;
     border-bottom-right-radius:5px ;
@@ -511,7 +510,11 @@ footer p:nth-child(2){
     line-height: 26px;
 }
 
-
+.confirmationWrapper{
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+}
 .confirmation-btn{
     text-decoration: none;
     color: white;
@@ -567,6 +570,11 @@ footer p:nth-child(2){
     cursor: pointer;
     margin: 12px 0;
 }
+.loginWrapper{
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+}
 .login-box{
     width: 280px;
     position: absolute;
@@ -613,6 +621,11 @@ footer p:nth-child(2){
     cursor: pointer;
     margin: 12px 0;
 }
+.userSignupWrapper{
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+}
 .Sign-Upbox{
     width: 400px;
     position: absolute;
@@ -623,6 +636,8 @@ footer p:nth-child(2){
     display: flex;
     flex-direction: column;
 }
+
+
 .Sign-Upbox h1{
     float: left;
     font-size: 40px;
@@ -638,17 +653,15 @@ footer p:nth-child(2){
     padding: 10px 0;
     margin: 8px 0;
     border-bottom: 1px solid gold;
-    position: relative;
+    
 }
-
-
 .textbox input{
     border: none;
     outline: none;
     background: none;
     color: aliceblue;
     font-size: 18px;
-    width: 250px;
+    width: 150px;
     float:left;
     margin: 0 10px;
 }
@@ -670,7 +683,7 @@ footer p:nth-child(2){
     color:white;
 }
 
-.userBody{
+.body{
     flex:8;
     background-color: #191919;
 }
@@ -679,7 +692,6 @@ footer p:nth-child(2){
     position: sticky;
     margin-bottom: 100px;
     top: 0;
-    z-index: 10;
     display: flex;
     justify-content: center;
     background-color: #191919;
@@ -848,132 +860,3 @@ footer p:nth-child(2){
     cursor: pointer;
     border-bottom: 1px dashed lightblue;
 }   
-
-
-/* Creator signup */
-.creatorSignupContainer{
-    background-color: black;
-    width:100%;
-    height:100vh;
-    display: flex;
-    flex-direction: column;
-    
-}
-.creatorSignupForm{
-    position: absolute;
-    width: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.creatorSignupTitle{
-    padding-bottom: 5px;
-    border-bottom: 10px gold solid;
-}
-.creatorSignupLeft{
-    width: 50%;
-}
-
-.creatorSignupRight{
-    width: 50%;
-    margin-left: 40px;
-}
-.creatorInfoContaier{
-    width: 80%;
-    margin: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.creatorSignupBtn{
-    margin-top: 20px;
-    width: 50%;
-    height: 50px;
-    background-color: black;
-    border-radius: 10px;
-    color: white;
-    font-size: 18px;
-    border: 3px gold solid;
-    cursor: pointer;
-}
-.creatorSignupBtn:hover{
-
-}
-
-.custom-file-upload{
-    position: absolute;
-    top:1px;
-    width: 95px;
-    left:8px;
-    font-size: 18px;
-    cursor: pointer;
-    color: #6c6a6a;
-    padding: 10px;
-    background-color: #101010;
-    border-radius: 10px;
-}
-.registered{
-    background-color: #101010;
-    height: 100vh;
-    width: 100%;
-}
-.settingWrapper{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.settingImageContainer{
- position: relative; 
- height: 40px; 
-}
-
-.settingImageContainer label{
-    margin-top: -2px;
-}
-.settingImageContainer div{
-    margin-top: -10px;
-}
-
-.setting{
-    width: 80%;
-    border: none;
-    display: flex;
-    justify-content: center;
-}
-
-.file-upload{
-    top:-5px;
-    padding: 5px 5px 5px 10px;
-    border: 1px gold solid;
-    position: absolute;   
-    background-color: #191919;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.settingForm{
-    width: 350px;
-    height: 50px;
-    border: 3px rgb(52, 49, 32) solid;
-    border-radius: 10px;
-}
-.profileChangebtn{
-    margin-top: 30px;
-    background-color: gold;
-    color: black;
-    border-radius: 10px;
-    cursor: pointer;
-    padding: 10px 20px;
-}
-.logo-small{
-    z-index: 20;
-    position: fixed;
-    top:24px;
-    right: 25px;
-}

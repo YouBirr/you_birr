@@ -6,7 +6,7 @@
             <span class="sidebarUserName"><%= user.username %></span>
         </div>
     <div class="sidebarActions">
-       <form class="sidebarForm" action="" method="post">
+       <form class="sidebarForm" action="/" method="post">
         <input type="hidden" name="userIdentifier" value=<%= user.username %>>
          <input type="hidden" name="sidebarFormIdentifier" value="feed">
          <button class="sidebarBtn" type="submit"><a class="sidebarLink">Feed</a></button>
@@ -23,12 +23,11 @@
        </form>
    </div>
     </div>
-    <div class="userBody">
-        <h2 class="logo-small"> You<span class="birr">Birr</span></h2>
+    <div class="body">
+        <div class="searchWrapper">
+            <input type="text" placeholder="find creators" class="creator-search">
+        </div>
         <% if (page==="feed") { %>
-            <div class="searchWrapper">
-                <input type="text" placeholder="find creators" class="creator-search">
-            </div>
             <div class="feed">
                 <% post.forEach(e => { %>
                     <div class="post">
@@ -62,21 +61,8 @@
                 <% }) %>
             </div>
         <% } else if(page === "setting"){ %>
-            <div class="settingWrapper">
-                <div class="setting">
-                    <form class="settingForm" action="/" method="post">
-                        <input type="hidden" name="settingIdentifier" value="picture">
-                        <div class="settingImageContainer">
-                            <label for="id" class="file-upload">
-                                Choose id
-                            </label>
-                            <div>
-                                <input required class- id="id" type="file"/>
-                            </div>
-                        </div>    
-                        <button type="submit" class="profileChangebtn">Change</button>             
-                    </form>
-                </div>
+            <div>
+                settings
             </div>
         <% } else { %>
             <div>
