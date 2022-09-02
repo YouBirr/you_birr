@@ -20,8 +20,8 @@ router.post('/accountConfirmation', appControllers.accountConfirmationPost);
 router.post('/', appControllers.userPagePost);
 
 //creator signup 
-// router.get('/creatorSignup',)
-// router.post('/creatorSignup',)
+router.get('/creatorSignup',appControllers.creatorSignupGet)
+router.post('/creatorSignup', appControllers.creatorSignupPost);
 
 
 module.exports = router;

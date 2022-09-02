@@ -1,7 +1,6 @@
 const mongoose=require("mongoose");
 const User = require("../models/User");
-const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose"); 
+const Creator = require("../models/Creator");
 
 const user2={
     username:"Michael G.",
@@ -48,20 +47,25 @@ const user2={
     },
     
   ]
-let userLoggedIn = false;
-let userTemp = {user:null, post:null, page:null}
 /////////////////////Landing Page/////////////////
 //renders landing page
-module.exports.landingGet = (req, res) =>{
-    if(req.isAuthenticated()){
-      res.render("userPage", userTemp);
-  }
-    else{
-        res.render("landing");    
+module.exports.landingGet = async (req, res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie}) || await Creator.findOne({username:cookie});
+  if(cookie){
+    if(user.isCreator){
+      res.render("creatorPage", {user:user, page:"feed", post:post});
     }
+    else{
+      res.render("userPage", {user:user, page:"feed", post:post});
+    }
+  }
+  else{
+    res.render("landing");
+  }    
 }
 
-/////////////////////Login Page/////////////////
+////////////////////Login Page/////////////////
 //renders login page
 module.exports.loginGet = (req,res) =>{
     console.log(typeof(req.url));
@@ -69,20 +73,10 @@ module.exports.loginGet = (req,res) =>{
 }
 //handles post request on the login page
 module.exports.loginPost = async (req,res) => {
-  const user = await User.findOne({username:req.body.username})
-    if(user){
-        userLoggedIn = true;
-        userTemp =  {user:user, post:post, page:"feed"};
-        req.login(user, function(err){
-          if(err){
-              console.log(err);
-          }
-          else{
-            passport.authenticate("local")
-            res.redirect("/");    
-            console.log("no error");
-          }
-        });
+  const user = await User.findOne({username:req.body.username}) || await Creator.findOne({username:req.body.username});
+  if(user){
+       res.cookie('username',user.username,{maxAge:1000});
+       res.redirect("/");
     }
     else{
         res.redirect("/login");
@@ -97,7 +91,7 @@ module.exports.userSignupGet = (req,res) =>{
 //handles post request on the user signup page
 module.exports.userSignupPost = async (req,res) =>{
     const userNameExists = await User.findOne({username:req.body.userName});
-    const phoneNumberExists = await User.findOne({phoneNumber:Number(req.body.phoneNumber)}); 
+    const phoneNumberExists = await User.findOne({phoneNumber:Number(req.body.phoneNumber)}) || await Creator.findOne({phoneNumber:Number(req.body.phoneNumber)}); 
 
     if(userNameExists){
         res.render("userSignup", {userNameTaken:true, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:false });    
@@ -178,3 +172,31 @@ module.exports.userPagePost = async (req,res) =>{
     res.render("userPage", {user:user, post:post, page:"feed"})
   }
 }
+
+
+////////////////// Creator Page ////////////////
+//get creator page
+module.exports.creatorSignupGet = (req,res) =>{
+  res.render("creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberTaken:false, phoneNumberInvalid:false});
+}
+module.exports.creatorSignupPost = async (req,res) =>{ 
+  const userNameExists = await User.findOne({username:req.body.userName}) || await Creator.findOne({phoneNumber:Number(req.body.phoneNumber)});
+  const phoneNumberExists = await User.findOne({phoneNumber:Number(req.body.phoneNumber)}) || await Creator.findOne({phoneNumber:Number(req.body.phoneNumber)}); 
+
+  if(userNameExists){
+      res.render("creatorSignup", {userNameTaken:true, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:false });    
+  }
+  else if(req.body.password.length < 9){
+      res.render("creatorSignup", {userNameTaken:false, passwordTooShort:true, phoneNumberInvalid:false, phoneNumberTaken:false });    
+  }
+  
+  else if(!(String(req.body.phoneNumber).length === 10)){
+      res.render("creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:true, phoneNumberTaken:false });    
+  }
+  else if(phoneNumberExists){
+      res.render("creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:true });    
+  }
+  else{
+    res.render("creatorRegistered");
+  }
+} 

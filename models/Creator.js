@@ -32,6 +32,10 @@ const CreatorSchema = new mongoose.Schema({
     },
     coverPicture:{
         type:String
+    },
+    isCreator:{
+        type:Boolean,
+        default:true
     }
 }, 
 {timestamps:true}

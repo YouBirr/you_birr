@@ -1,0 +1,45 @@
+<%- include("partials/header") -%> 
+    <form class="payment" action="/payment" method="post">
+            <h1>pay Here</h1>
+            <div class="textbox">  
+                <input type="text" placeholder="Username" name="username" value="">
+            </div>
+            <div class="textbox">
+               <input type="text" placeholder="enter the code"  name="code" value="">
+            </div>
+            <div class="textbox">
+             <input type="num" placeholder="amount"  name="amount" value="">
+            </div>
+            <button type="submit" class="btn">pay</button>
+    </form>
+    <div class="payment">
+        <div class="textbox">
+            <form class="payment-form" action="/support" method="post">
+                <label class="payment-label" for="fname">First Name</label>
+                <input class="textbox" name="firstName" type="text" id="fname" required/>
+                <label class="payment-label" for="lname">Last Name</label>
+                <input class="textbox" name="lastName" type="text" id ="lname"  required/>
+                <label class="payment-label" for="pass">Email</label>
+                <input class="textbox" name="email" type="email"  id="pass" required/>
+                <label class="payment-label" for="amount">Amount</label>
+                <input class="textbox" name="amount" type="text"  id="amount" required/>
+                <label class="payment-label" for="currency">Currency</label>
+                <input class="textbox" name="currency" type="text" value="ETB" id="currency" required/>
+                <input class="textbox" name="paymentIdentifier" type="hidden" value="chapa"/>
+                <button class="payment-btn payment-btn-1" type="submit">Pay with chapa</button>
+            </form>
+        </div>
+    <div class="textbox">
+        <form class="payment-form" action="/support" method="post">
+            <label class="payment-label" for="transaction">Transaction Number</label>
+            <input class="payment-input" name="paymentIdentifier" type="hidden" value="telebirr"/>
+            <input class="payment-input" name="transactionNum" type="text" id="transaction" required/>
+            <button class="payment-btn payment-btn-2" type="submit">Confirm Payment</button>
+            <% if(!confirmStatus){ %>
+                <a class="login-status">Invalid entry</a>
+              <% }  %>
+        </form>
+    </div>
+    </div>
+</body>
+</html>

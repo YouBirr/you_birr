@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const UserSchema = new mongoose.Schema({
+
+const ApprovedCreatorSchema = new mongoose.Schema({
     username:{
         type:String,
         required: true,
@@ -15,29 +16,36 @@ const UserSchema = new mongoose.Schema({
         required: true,
         min:6
     },
+    category:{
+        type:Array,
+        default:[]
+    },
     description:{
         type:String,
     },
-    followings:{
+    followers:{
         type:Array,
         default:[]
     },
     profilePicture:{
         type:String,
     },
-    tempPass:{
+    coverPicture:{
         type:String
     },
-    confirmationErrorCounter:{
-        type:Number,
-        default:0
+    id:{
+        type:String
     },
-    isCreator:{
-        type:Boolean,
-        default:false
+    image:{
+        type:String
+    },
+    account:{
+        type:Array,
+        default:[]   
     }
 }, 
 {timestamps:true}
 
 )
-module.exports = mongoose.model("User", UserSchema);
+
+module.exports = mongoose.model("ApprovedCreator", ApprovedCreatorSchema);

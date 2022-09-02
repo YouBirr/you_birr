@@ -9,9 +9,7 @@ const User = require("./models/User");
 const Creator = require("./models/Creator");
 const Post = require("./models/Post");
 const appRoutes = require('./routes/appRoutes')
-const session = require("express-session");
-const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose"); 
+const cookieParser = require("cookie-parser");
 
 let currentCreator, confirmStatus=true;
 var options = {
@@ -37,15 +35,7 @@ var options = {
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}))
-//initialize session
-app.use(session({
-  secret: "secret",
-  resave:false,
-  saveUninitialized:false
-}))
-//initialize passport
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(cookieParser());
 app.use(appRoutes);
 
 
@@ -57,15 +47,10 @@ mongoose.connect("mongodb://localhost:27017/creatorsDB", {useNewUrlParser:true, 
     console.log("connected to database");
   }
 });
-
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-  
     
 
 //Listening
-app.listen(3000,function(res,res){
+app.listen(3002,function(res,res){
   console.log("listening");
 })
                                                                                                                                                                                                                                                                                 
