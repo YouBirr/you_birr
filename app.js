@@ -10,13 +10,15 @@ const Creator = require("./models/Creator");
 const Post = require("./models/Post");
 const appRoutes = require('./routes/appRoutes')
 const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
 
+dotenv.config();
 let currentCreator, confirmStatus=true;
 var options = {
   'method': 'POST',
   'url': 'https://api.chapa.co/v1/transaction/initialize/',
   'headers': {
-    'Authorization': 'Bearer CHASECK_TEST-VwMkgsgFVZ6Ac1Bo85MICOLYoC01kEvY'
+    'Authorization': 'Bearer '
   },
   formData: {
     'amount': '',

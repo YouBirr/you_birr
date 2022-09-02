@@ -1,6 +1,8 @@
 const mongoose=require("mongoose");
 const User = require("../models/User");
 const Creator = require("../models/Creator");
+const axios = require("axios");
+const dotenv = require("dotenv");
 
 const user2={
     username:"Michael G.",
@@ -47,6 +49,9 @@ const user2={
     },
     
   ]
+
+dotenv.config();
+
 /////////////////////Landing Page/////////////////
 //renders landing page
 module.exports.landingGet = async (req, res) =>{
@@ -119,10 +124,10 @@ module.exports.userSignupPost = async (req,res) =>{
         const name = user.username;
         const pass = user.tempPass;
         const phoneTrimmed = user.phoneNumber.split("").splice(user.phoneNumber.length-8, user.phoneNumber.length).join("");
-        // axios.post(`https://sms.hahucloud.com/api/send?key=609c28d648dc02f72c43f78fd98f9e72bca2f965&phone=+2519${phoneTrimmed}&message=${pass}`)
-        // .then((res)=>{
-        //   console.log(res.data);
-        // })
+        axios.post(`https://sms.hahucloud.com/api/send?key=${process.env.HAHU_KEY}&phone=+2519${phoneTrimmed}&message=${pass}`)
+        .then((res)=>{
+          console.log(res.data);
+        })
         res.render("accountConfirmation", {tempName:name, confirmationError:false, errorCounter:0});
     }
 
