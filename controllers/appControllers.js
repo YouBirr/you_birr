@@ -53,45 +53,43 @@ const user2={
 dotenv.config();
 
 /////////////////////Landing Page/////////////////
+//get
 //renders landing page
 module.exports.landingGet = async (req, res) =>{
-  const cookie = req.cookies.username;
-  const user = await User.findOne({username:cookie}) || await Creator.findOne({username:cookie});
-  if(cookie){
-    if(user.isCreator){
-      res.render("creatorPage", {user:user, page:"feed", post:post});
-    }
-    else{
-      res.render("userPage", {user:user, page:"feed", post:post});
-    }
-  }
-  else{
-    res.render("landing");
-  }    
+    res.render("landing"); 
 }
+
 
 ////////////////////Login Page/////////////////
 //renders login page
 module.exports.loginGet = (req,res) =>{
     console.log(typeof(req.url));
-    res.render("login");
+    res.render("login", {error:null});
 }
 //handles post request on the login page
 module.exports.loginPost = async (req,res) => {
-  const user = await User.findOne({username:req.body.username}) || await Creator.findOne({username:req.body.username});
+  const user = await User.findOne({username:req.body.username}) 
+  const creator = await Creator.findOne({username:req.body.username});
+
   if(user){
-       res.cookie('username',user.username,{maxAge:1000});
-       res.redirect("/");
+      res.cookie('username',user.username);
+      res.redirect("/user");
+    }
+    else if(creator){
+      res.cookie('creatorUsername', creator.username);
+      res.redirect("/creator");
     }
     else{
-        res.redirect("/login");
+      res.render("login", {error:"user doesn't exist"});
     }
 }
+
+
 
 ////////////////////User Signup Page/////////////
 //renders the user signup page
 module.exports.userSignupGet = (req,res) =>{
-    res.render("userSignup",  {userNameTaken:false, passwordTooShort:false, phoneNumberTaken:false, phoneNumberInvalid:false});
+    res.render("user/userSignup",  {userNameTaken:false, passwordTooShort:false, phoneNumberTaken:false, phoneNumberInvalid:false});
 }
 //handles post request on the user signup page
 module.exports.userSignupPost = async (req,res) =>{
@@ -99,17 +97,17 @@ module.exports.userSignupPost = async (req,res) =>{
     const phoneNumberExists = await User.findOne({phoneNumber:Number(req.body.phoneNumber)}) || await Creator.findOne({phoneNumber:Number(req.body.phoneNumber)}); 
 
     if(userNameExists){
-        res.render("userSignup", {userNameTaken:true, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:false });    
+        res.render("user/userSignup", {userNameTaken:true, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:false });    
     }
     else if(req.body.password.length < 9){
-        res.render("userSignup", {userNameTaken:false, passwordTooShort:true, phoneNumberInvalid:false, phoneNumberTaken:false });    
+        res.render("user/userSignup", {userNameTaken:false, passwordTooShort:true, phoneNumberInvalid:false, phoneNumberTaken:false });    
     }
     
     else if(!(String(req.body.phoneNumber).length === 10)){
-        res.render("userSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:true, phoneNumberTaken:false });    
+        res.render("user/userSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:true, phoneNumberTaken:false });    
     }
     else if(phoneNumberExists){
-        res.render("userSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:true });    
+        res.render("user/userSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:true });    
     }
     else{
         const user = new User({
@@ -124,11 +122,11 @@ module.exports.userSignupPost = async (req,res) =>{
         const name = user.username;
         const pass = user.tempPass;
         const phoneTrimmed = user.phoneNumber.split("").splice(user.phoneNumber.length-8, user.phoneNumber.length).join("");
-        axios.post(`https://sms.hahucloud.com/api/send?key=${process.env.HAHU_KEY}&phone=+2519${phoneTrimmed}&message=${pass}`)
-        .then((res)=>{
-          console.log(res.data);
-        })
-        res.render("accountConfirmation", {tempName:name, confirmationError:false, errorCounter:0});
+        // axios.post(`https://smschef.com/system/api/send?key=${process.env.SMSCHEF_KEY}&phone=+2519${phoneTrimmed}&message=${pass}`)
+        // .then((res)=>{
+        //   console.log(res.data);
+        // })
+        res.render("user/accountConfirmation", {tempName:name, confirmationError:false, errorCounter:0});
     }
 
 }
@@ -136,15 +134,13 @@ module.exports.userSignupPost = async (req,res) =>{
 //////////////////Account Confirmation Page//////////////
 //handles post request on the account confirmation page
 module.exports.accountConfirmationPost = async (req,res) => {
-
     const user = await User.findOne({username:req.body.confirmationIdentifier});
     const name = user.username;
     const pass = user.tempPass;
     const errorCounter = user.confirmationErrorCounter;
-    if(pass ===(req.body.code)){
-        userLoggedIn = true;
-        userTemp =  {user:user, post:post, page:"feed"};
-        res.redirect("/");
+    if(pass === (req.body.code)){
+        res.cookie('username',user.username);
+        res.redirect("/user");
     }
     else{
         await User.findOneAndUpdate({username:name}, {confirmationErrorCounter:errorCounter+1});
@@ -156,52 +152,184 @@ module.exports.accountConfirmationPost = async (req,res) => {
             res.redirect("/userSignup");
         }
         else{
-          res.render("accountConfirmation", {tempName:name, confirmationError:true, errorCounter:updatedErrorCounter});
+          res.render("user/accountConfirmation", {tempName:name, confirmationError:true, errorCounter:updatedErrorCounter});
         }
     }
 }
 
 //////////////////User Page///////////////////
-module.exports.userPagePost = async (req,res) =>{
-  const userName = req.body.userIdentifier;
-  const user = await User.findOne({username:userName})
-  const sidebarAction = req.body.sidebarFormIdentifier;
-  // const user = await User.findOne({username:userName});
-  if(sidebarAction === "setting"){
-    res.render("userPage", {user:user, post:post, page:"setting"})
-  }  
-  if(sidebarAction === "following"){
-    res.render("userPage", {user:user, post:post, page:"following"})
+//////////user page get
+//user page get feed(/user)
+module.exports.userPageGet = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  if(cookie){
+      res.render("user/feed", {user:user, post:post});
   }
   else{
-    res.render("userPage", {user:user, post:post, page:"feed"})
+      res.send("page not found");
+  }   
+}
+//user page get setting(/user/setting)
+module.exports.userPageSettingGet = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  if(cookie){
+      res.render("user/setting", {user:user, post:post});
+  }
+  else{
+    res.send("page not found");
+  }   
+}
+//user page get search (/user/search)
+module.exports.userPageSearchGet = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  if(cookie){
+      res.render("user/searchFeed", {user:user, post:post});
+  }
+  else{
+    res.send("page not found");
+  }   
+}
+//user page get following list (/user/following)
+module.exports.userPageFollowingsGet = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  if(cookie){
+      res.render("user/followingList", {user:user, post:post});
+  }
+  else{
+    res.send("page not found");
+  }   
+}
+//user page get package (/user/following)
+module.exports.userPagePackageGet = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  //const creator = await Creator.findOne({username:user.tempFollowing}); 
+  res.render("package", {user:user});
+}
+//user page get payment (/user/payment)
+module.exports.userPagePaymentGet = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  //const creator = await Creator.findOne({username:user.tempFollowing}); 
+  res.render("payment", {user:user});
+}
+
+
+
+//user page post
+module.exports.userPagePost = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  const action = req.body.formIdentifier;
+  // const user = await User.findOne({username:userName});
+  if(action === "setting"){
+    res.redirect("/user/setting");
+  }  
+  else if(action === "following"){
+    res.redirect("/user/following")
+  }
+  else if(action === "search"){
+    res.redirect("/user/search")
+  }
+  else{
+    res.redirect("/user")
   }
 }
-
-
-////////////////// Creator Page ////////////////
-//get creator page
-module.exports.creatorSignupGet = (req,res) =>{
-  res.render("creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberTaken:false, phoneNumberInvalid:false});
+//user page search post
+module.exports.userPageSearchPost = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  // user.tempFollowing  = req.body.userSearchIdentifier;
+  // await user.save(); 
+  res.redirect("/user/package");
 }
+
+//user page package post
+module.exports.userPagePackagePost = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  // user.tempAmount  = req.body.userPackageIdentifier;
+  // await user.save(); 
+  res.redirect("/user/payment");
+}
+
+//user page payment post
+module.exports.userPagePaymentPost = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  // user.tempAmount  = req.body.userPackageIdentifier;
+  // await user.save(); 
+  res.redirect("/user");
+
+}
+
+
+
+////////////////// Creator Signup ////////////////
+//get creator signup page
+module.exports.creatorSignupGet = (req,res) =>{
+  res.render("creator/creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberTaken:false, phoneNumberInvalid:false});
+}
+//post creator signup page
 module.exports.creatorSignupPost = async (req,res) =>{ 
   const userNameExists = await User.findOne({username:req.body.userName}) || await Creator.findOne({phoneNumber:Number(req.body.phoneNumber)});
   const phoneNumberExists = await User.findOne({phoneNumber:Number(req.body.phoneNumber)}) || await Creator.findOne({phoneNumber:Number(req.body.phoneNumber)}); 
 
   if(userNameExists){
-      res.render("creatorSignup", {userNameTaken:true, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:false });    
+      res.render("creator/creatorSignup", {userNameTaken:true, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:false });    
   }
   else if(req.body.password.length < 9){
-      res.render("creatorSignup", {userNameTaken:false, passwordTooShort:true, phoneNumberInvalid:false, phoneNumberTaken:false });    
+      res.render("creator/creatorSignup", {userNameTaken:false, passwordTooShort:true, phoneNumberInvalid:false, phoneNumberTaken:false });    
   }
   
   else if(!(String(req.body.phoneNumber).length === 10)){
-      res.render("creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:true, phoneNumberTaken:false });    
+      res.render("creator/creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:true, phoneNumberTaken:false });    
   }
   else if(phoneNumberExists){
-      res.render("creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:true });    
+      res.render("creator/creatorSignup", {userNameTaken:false, passwordTooShort:false, phoneNumberInvalid:false, phoneNumberTaken:true });    
   }
   else{
-    res.render("creatorRegistered");
+    const creator = new Creator({username:req.body.userName, password:req.body.password, phoneNumber:req.body.phoneNumber});
+    await creator.save();
+    console.log(creator); 
+    res.render("creator/creatorRegistered");
   }
 } 
+
+
+///////////////////// Creator Page ///////////////////
+//creator page get
+module.exports.creatorPageGet = async (req,res) =>{
+  const cookie = req.cookies.creatorUsername;
+  const user = await Creator.findOne({username:cookie});
+
+  if(cookie){
+      res.render("creator/creatorPage", {user:user, page:"feed", post:post});
+  }
+  else{
+    res.send("page not found");
+  }   
+}
+//creator page post
+module.exports.creatorPagePost = async (req,res) =>{
+  const cookie = req.cookies.creatorUsername;
+  const user = await Creator.findOne({username:cookie});
+  console.log(user);
+  const action = req.body.formIdentifier;
+  if(action === "setting"){
+    res.render("creator/creatorPage", {user:user, post:post, page:"setting"})
+  }  
+  else if(action === "following"){
+    res.render("creator/creatorPage", {user:user, post:post, page:"following"})
+  }
+  else if(action === "search"){
+    res.render("creator/creatorPage", {user:user, post:post, page:"search"})
+  }
+  else{
+    res.render("creator/creatorPage", {user:user, post:post, page:"feed"})  
+  }
+}

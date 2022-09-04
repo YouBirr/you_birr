@@ -1,0 +1,41 @@
+<%- include("../partials/header") -%> 
+<%- include("./userPage") -%> 
+<div class="searchWrapper">
+    <form action="/user" method="post">
+        <input type="hidden" name="formIdentifier" value="search">
+        <input type="text" placeholder="find creators" class="creator-search">
+        <button class="searchBtn" type="submit"><i class="fa-sharp fa-solid fa-magnifying-glass searchLink"></i></button>
+    </form>
+</div>
+<div class="feed">
+        <div class="post">
+            <div class="postWrapper">
+                <div class="postTop">
+                    <div class="postTopLeft">
+                        <img alt="" class="postProfileImg"/>
+                        <span class="postUsername">Creator Name</span>
+                        <span class="postDate">2 days ago</span>
+                    </div>
+                    <div class="postTopRight">
+                        ...
+                    </div>
+                </div>
+                <div class="postCenter">
+                    <span class="postText">Some caption</span>
+                    <img alt="" class="postImg"> />
+                </div>  
+                <div class="postBottom">
+                     <div class="postBottomLeft">
+                        <img src="images/yellow.png" alt="" class="likeIcon"/>
+                        <img src="images/yellow.png" alt="" class="likeIcon"/>
+                        <span class="postLikeCounter">12 people liked so far</span>
+                     </div>
+                     <div class="postBottomRight">
+                        <span class="postCommentText">1 comments</span>
+                     </div>
+                </div>
+            </div>    
+        </div>
+</div>
+</div>
+</div>

@@ -10,9 +10,9 @@ const Creator = require("./models/Creator");
 const Post = require("./models/Post");
 const appRoutes = require('./routes/appRoutes')
 const cookieParser = require("cookie-parser");
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
 
-dotenv.config();
+// dotenv.config();
 let currentCreator, confirmStatus=true;
 var options = {
   'method': 'POST',
@@ -35,7 +35,7 @@ var options = {
 
 
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookieParser());
 app.use(appRoutes);
@@ -52,7 +52,9 @@ mongoose.connect("mongodb://localhost:27017/creatorsDB", {useNewUrlParser:true, 
     
 
 //Listening
-app.listen(3002,function(res,res){
-  console.log("listening");
+app.listen(3002, async function(res,res){
+  console.log("listening"); 
+  // await User.findOneAndDelete({username:"dave"})
+  // console.log(await User.findOne({username:"dave"}))
 })
                                                                                                                                                                                                                                                                                 

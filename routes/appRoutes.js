@@ -17,11 +17,27 @@ router.post('/userSignup', appControllers.userSignupPost);
 router.post('/accountConfirmation', appControllers.accountConfirmationPost);
 
 //user page
-router.post('/', appControllers.userPagePost);
+router.get('/user', appControllers.userPageGet)
+router.post('/user', appControllers.userPagePost);
+router.get("/user/setting", appControllers.userPageSettingGet);
+router.get('/user/search', appControllers.userPageSearchGet);
+router.post('/user/search', appControllers.userPageSearchPost);
+router.get('/user/following', appControllers.userPageFollowingsGet);
+router.get('/user/package', appControllers.userPagePackageGet);
+router.post('/user/package', appControllers.userPagePackagePost);
+router.get('/user/payment', appControllers.userPagePaymentGet);
+router.post('/user/payment', appControllers.userPagePaymentPost);
+
+//user search
+// router.get('/user/search', appControllers.userSearchGet);
+
 
 //creator signup 
 router.get('/creatorSignup',appControllers.creatorSignupGet)
 router.post('/creatorSignup', appControllers.creatorSignupPost);
+//creator page
+router.get('/creator', appControllers.creatorPageGet);
+router.post('/creator', appControllers.creatorPagePost);
 
 
 module.exports = router;
