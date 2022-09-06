@@ -2,59 +2,26 @@
 <div class="user-page creator-page">
     <div class="sidebar">
         <div class="userProfile">
-            <img class="sidebarProfilePicture" alt="" src=<%= user.image %> >
-            <span class="sidebarUserName"><%= user.username %></span>
+            <img class="sidebarProfilePicture" alt="" src=<%= creator.image %> >
+            <span class="sidebarUserName"><%= creator.username %></span>
         </div>
     <div class="sidebarActions">
        <form class="sidebarForm" action="/creator" method="post">
-        <input type="hidden" name="userIdentifier" value=<%= user.username %>>
-         <input type="hidden" name="sidebarFormIdentifier" value="feed">
+        <input type="hidden" name="userIdentifier" value=<%= creator.username %>>
+         <input type="hidden" name="formIdentifier" value="feed">
          <button class="sidebarBtn" type="submit"><a class="sidebarLink">Post</a></button>
        </form>
        <form class="sidebarForm" action="/creator" method="post">   
-        <input type="hidden" name="userIdentifier" value=<%= user.username %>>  
-        <input type="hidden" name="sidebarFormIdentifier" value="setting">
+        <input type="hidden" name="userIdentifier" value=<%= creator.username %>>  
+        <input type="hidden" name="formIdentifier" value="setting">
          <button class="sidebarBtn" type="submit"><a class="sidebarLink" >Setting</a></button>
        </form>
        <form class="sidebarForm" action="/creator" method="post">
-        <input type="hidden" name="userIdentifier" value=<%= user.username %>>
-        <input type="hidden" name="sidebarFormIdentifier" value="following">
-         <button class="sidebarBtn" type="submit"><a class="sidebarLink">Following</a></button>
+        <input type="hidden" name="userIdentifier" value=<%= creator.username %>>
+        <input type="hidden" name="formIdentifier" value="account">
+         <button class="sidebarBtn" type="submit"><a class="sidebarLink">Account</a></button>
        </form>
-   </div>
+    </div>
     </div>
     <div class="creatorBody">
-        <% if (page==="feed") { %>
-            <div class='share'>
-                <div class="shareWrapper">
-                    <div class="shareTop">
-                    <img src="/assets/yellow.png" class="shareProfileImg" alt="" />
-                    <input type="text" class="shareInputLink" placeholder="Youtube link"/>    
-                </div>
-                <textarea name="" class="shareCaption" cols="50" rows="5">Caption</textarea>
-                    <div class="shareBottom">
-                        <div class="shareOptions">
-                            <div class="shareOption">
-                            <span class="shareOptionText">&nabla;</span>
-                            </div>
-                            <div class="shareOption">
-                            <span class="shareOptionText">&nle;</span>
-                            </div>
-                        </div>
-                        <button class="shareButton">Share</button>
-                    </div>
-                </div>                
-            </div>  
-
-        <% } else if(page === "setting"){ %>
-            <div>
-                <%= user.username%> Setting
-            </div>
-        <% } else { %>
-            <div>
-                <%= user.username%> Followers
-            </div>
-        <%}%>
-        
-    </div>
-</div>
+    

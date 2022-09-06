@@ -10,28 +10,12 @@ const Creator = require("./models/Creator");
 const Post = require("./models/Post");
 const appRoutes = require('./routes/appRoutes')
 const cookieParser = require("cookie-parser");
-// const dotenv = require("dotenv");
+const dotenv = require("dotenv");
+const Transaction = require("./models/Transaction");
 
-// dotenv.config();
+dotenv.config();
 let currentCreator, confirmStatus=true;
-var options = {
-  'method': 'POST',
-  'url': 'https://api.chapa.co/v1/transaction/initialize/',
-  'headers': {
-    'Authorization': 'Bearer '
-  },
-  formData: {
-    'amount': '',
-    'currency': '',
-    'email': '',
-    'first_name': '',
-    'last_name': '',
-    'tx_ref': '',
-    'callback_url': 'http://localhost:3000/users',
-  //   'customization[title]': 'I love e-commerce',
-  //   'customization[description]': 'It is time to pay'
-  }
-};
+
 
 
 app.set("view engine", "ejs");
@@ -41,7 +25,7 @@ app.use(cookieParser());
 app.use(appRoutes);
 
 
-mongoose.connect("mongodb://localhost:27017/creatorsDB", {useNewUrlParser:true, useUnifiedTopology:true}, (err)=>{
+mongoose.connect("mongodb://localhost:27017/YouBirrDB", {useNewUrlParser:true, useUnifiedTopology:true}, (err)=>{
   if(err){
     console.log(err);
   }
@@ -53,8 +37,26 @@ mongoose.connect("mongodb://localhost:27017/creatorsDB", {useNewUrlParser:true, 
 
 //Listening
 app.listen(3002, async function(res,res){
-  console.log("listening"); 
-  // await User.findOneAndDelete({username:"dave"})
-  // console.log(await User.findOne({username:"dave"}))
+  setInterval( async function(){
+    axios.get(`https://sms.hahucloud.com/api/get/received?key=${process.env.HAHU_KEY}&limit=5`)
+    .then((res)=>{
+      messageData = (res.data.data);
+      messageData.forEach((d)=>{
+        let phoneNumber = d.phone;
+        if(phoneNumber === "+251939371462"){
+        let splittedMessageArr = d.message.split("transaction")[1].split("is")[1].split("Your")[0].trim().split("");
+        let splittedMessageArr2 = d.message.split("ETB")[1].trim().split(" ");
+        let transactionNumber = splittedMessageArr.slice(0,splittedMessageArr.length-1).join("");           
+        let amount= splittedMessageArr2[0];
+          
+        Transaction.findOne()
+        const transaction = new Transaction({transactionNumber:transactionNumber, phoneNumber:phoneNumber, amount:amount});
+        
+        console.log(transactionNumber, amount, phoneNumber);
+      }}
+    )
+    }
+    ).catch(e=>console.log(e));
+} ,5000)
 })
                                                                                                                                                                                                                                                                                 

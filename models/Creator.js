@@ -9,12 +9,14 @@ const CreatorSchema = new mongoose.Schema({
     phoneNumber:{
         type:String,
         required: true,
-        unique:true
     },
     password:{
         type:String,
         required: true,
         min:6
+    },
+    image:{
+        type:String
     },
     category:{
         type:Array,
@@ -36,6 +38,14 @@ const CreatorSchema = new mongoose.Schema({
     isCreator:{
         type:Boolean,
         default:true
+    },
+    balance:{
+        type:Number,
+        default:0
+    },
+    packages:{
+        type:Array,
+        default:[]
     }
 }, 
 {timestamps:true}

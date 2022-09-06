@@ -3,6 +3,25 @@ const User = require("../models/User");
 const Creator = require("../models/Creator");
 const axios = require("axios");
 const dotenv = require("dotenv");
+const request = require("request")
+var options = {
+  'method': 'POST',
+  'url': 'https://api.chapa.co/v1/transaction/initialize/',
+  'headers': {
+    'Authorization': 'Bearer CHASECK_TEST-VwMkgsgFVZ6Ac1Bo85MICOLYoC01kEvY'
+  },
+  formData: {
+    'amount': '',
+    'currency': '',
+    'email': '',
+    'first_name': '',
+    'last_name': '',
+    'tx_ref': '',
+    'callback_url': 'http://localhost:3002/user',
+  //   'customization[title]': 'I love e-commerce',
+  //   'customization[description]': 'It is time to pay'
+  }
+};
 
 const user2={
     username:"Michael G.",
@@ -122,10 +141,10 @@ module.exports.userSignupPost = async (req,res) =>{
         const name = user.username;
         const pass = user.tempPass;
         const phoneTrimmed = user.phoneNumber.split("").splice(user.phoneNumber.length-8, user.phoneNumber.length).join("");
-        // axios.post(`https://smschef.com/system/api/send?key=${process.env.SMSCHEF_KEY}&phone=+2519${phoneTrimmed}&message=${pass}`)
-        // .then((res)=>{
-        //   console.log(res.data);
-        // })
+        axios.post(`https://smschef.com/system/api/send?key=${process.env.SMSCHEF_KEY}&phone=+2519${phoneTrimmed}&message=${pass}`)
+        .then((res)=>{
+          console.log(res.data);
+        })
         res.render("user/accountConfirmation", {tempName:name, confirmationError:false, errorCounter:0});
     }
 
@@ -192,12 +211,12 @@ module.exports.userPageSearchGet = async (req,res) =>{
     res.send("page not found");
   }   
 }
-//user page get following list (/user/following)
-module.exports.userPageFollowingsGet = async (req,res) =>{
+//user page get account (/user/following)
+module.exports.userPageAccountGet = async (req,res) =>{
   const cookie = req.cookies.username;
   const user = await User.findOne({username:cookie});
   if(cookie){
-      res.render("user/followingList", {user:user, post:post});
+      res.render("user/account", {user:user});
   }
   else{
     res.send("page not found");
@@ -229,8 +248,8 @@ module.exports.userPagePost = async (req,res) =>{
   if(action === "setting"){
     res.redirect("/user/setting");
   }  
-  else if(action === "following"){
-    res.redirect("/user/following")
+  else if(action === "account"){
+    res.redirect("/user/account")
   }
   else if(action === "search"){
     res.redirect("/user/search")
@@ -261,9 +280,27 @@ module.exports.userPagePackagePost = async (req,res) =>{
 module.exports.userPagePaymentPost = async (req,res) =>{
   const cookie = req.cookies.username;
   const user = await User.findOne({username:cookie});
-  // user.tempAmount  = req.body.userPackageIdentifier;
+   //user.tempAmount  = req.body.userPackageIdentifier;
   // await user.save(); 
-  res.redirect("/user");
+  if(req.body.paymentIdentifier === "chapa"){
+    console.log("at chapa");
+
+    options.formData.amount = req.body.amount;
+    options.formData.currency = req.body.currency;
+    options.formData.email = req.body.email;
+    options.formData.first_name = req.body.firstName;
+    options.formData.last_name = req.body.lastName;
+    options.formData.tx_ref = "DigitalPayment" + Date.now();
+    request(options, function (error, response) {
+        if (error) throw new Error(error);
+        const responseData = JSON.parse(response.body)
+        console.log(responseData);
+        res.redirect(`${responseData.data.checkout_url}`);
+    });
+  }
+  else{
+    res.redirect("/user");
+  }
 
 }
 
@@ -305,31 +342,61 @@ module.exports.creatorSignupPost = async (req,res) =>{
 //creator page get
 module.exports.creatorPageGet = async (req,res) =>{
   const cookie = req.cookies.creatorUsername;
-  const user = await Creator.findOne({username:cookie});
+  const creator = await Creator.findOne({username:cookie});
 
   if(cookie){
-      res.render("creator/creatorPage", {user:user, page:"feed", post:post});
+      res.render("creator/post", {creator:creator});
   }
   else{
     res.send("page not found");
   }   
 }
-//creator page post
-module.exports.creatorPagePost = async (req,res) =>{
+
+//creator page setting get
+module.exports.creatorPageSettingGet = async (req,res) =>{
   const cookie = req.cookies.creatorUsername;
-  const user = await Creator.findOne({username:cookie});
-  console.log(user);
-  const action = req.body.formIdentifier;
-  if(action === "setting"){
-    res.render("creator/creatorPage", {user:user, post:post, page:"setting"})
-  }  
-  else if(action === "following"){
-    res.render("creator/creatorPage", {user:user, post:post, page:"following"})
-  }
-  else if(action === "search"){
-    res.render("creator/creatorPage", {user:user, post:post, page:"search"})
+  const creator = await Creator.findOne({username:cookie});
+  if(cookie){
+      res.render("creator/setting", {creator:creator});
   }
   else{
-    res.render("creator/creatorPage", {user:user, post:post, page:"feed"})  
+    res.send("page not found");
+  }   
+}
+
+
+//creator page account get
+module.exports.creatorPageAccountGet = async(req,res)=>{
+  const cookie = req.cookies.creatorUsername;
+  const creator = await Creator.findOne({username:cookie});
+  if(cookie){
+      console.log(creator);
+      res.render("creator/account", {creator:creator});
   }
+  else{
+    res.send("page not found");
+  }   
+}
+//////creator page post//////
+//post page
+module.exports.creatorPagePost = async (req,res) =>{
+  const cookie = req.cookies.creatorUsername;
+  const creator = await Creator.findOne({username:cookie});
+  const action = req.body.formIdentifier; 
+  if(action === "account"){
+    res.redirect("creator/account")
+  }
+  else if(action === "setting"){
+    res.redirect("creator/setting")
+  }
+  else{
+    res.redirect("creator");
+  }
+}
+//account page
+module.exports.creatorPageAccountPost = async (req,res) =>{
+  const cookie = req.cookies.creatorUsername;
+  const creator = await Creator.findOne({username:cookie});
+  const action = req.body.formIdentifier; 
+   
 }

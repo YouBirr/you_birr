@@ -2,7 +2,7 @@
 <div class="user-page">
     <div class="sidebar">
         <div class="userProfile">
-            <img class="sidebarProfilePicture" alt="" src=<%= user.image %> >
+            <img class="sidebarProfilePicture" alt="" src="/images/manCamera.jpg" >
             <span class="sidebarUserName"><%= user.username %></span>
         </div>
     <div class="sidebarActions">
@@ -18,8 +18,8 @@
        </form>
        <form class="sidebarForm" action="/user" method="post">
         <input type="hidden" name="userIdentifier" value=<%= user.username %>>
-        <input type="hidden" name="formIdentifier" value="following">
-        <button class="sidebarBtn" type="submit"><a class="sidebarLink">Following</a></button>
+        <input type="hidden" name="formIdentifier" value="account">
+        <button class="sidebarBtn" type="submit"><a class="sidebarLink">Account</a></button>
        </form>
    </div>
     </div>

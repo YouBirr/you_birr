@@ -1231,7 +1231,7 @@ footer p:nth-child(2){
     display: flex;
     height: 100vh;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
 }
 .payment{
     margin: 80px;
