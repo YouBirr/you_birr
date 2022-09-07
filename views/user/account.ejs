@@ -3,24 +3,30 @@
 <div class="paymentWrapper">
   <div class="payment">
           <h1>Deposit</h1>
-          <form method="post" action="/user/payment">
-            <input type="hidden" name="paymentIdentifier" value="telebirr">
+          <form method="post" action="/user/account">
+                <input type="hidden" name="paymentIdentifier" value="deposit">
                 <div class="textbox">  
-                 <input type="text" placeholder="transaction number" name="transactionNum" value="">
-                </div>  
-                <div class="textbox textboxPhone">  
-                 <label for="">To: +251902121212</label>
-               </div>           
+                 <input type="text" required placeholder="transaction number" name="transactionNum" value="">
+                </div>
+                <% if(error && error === "duplication"){ %>
+                  <p class="signup-error">This transaction number has already been used.</p>
+                <%} else if(error && error === "inExistence"){ %>
+                  <p class="signup-error">This transaction number doesn't exist.</p>
+                <%} %>  
+                
                <button class="btn" type="submit">Deposit</button>
         </form>
         <h1 style="margin-top:40px">Withdraw</h1>
-        <form method="post" action="/user/payment">
-          <input type="hidden" name="paymentIdentifier" value="telebirr">
+        <form method="post" action="/user/account">
+              <input type="hidden" name="paymentIdentifier" value="withdraw">
               <div class="textbox">  
-               <input type="text" placeholder="Amount" name="transactionNum" value="">
-              </div>  
-              <div class="textbox textboxPhone">  
-             </div>           
+              <input type="number" required placeholder="Amount" name="amount" value="">
+              </div>
+              <% if(withdrawError && withdrawError === "insufficient"){ %>
+                <p class="signup-error">Your balance is insufficient for this service.</p>
+              <%} else if(withdrawError && withdrawError === "wrongInput"){ %>
+                <p class="signup-error">Please use only integer number.</p>
+              <%} %>             
              <button class="btn" type="submit">Withdraw</button>
       </form>
   </div>
@@ -33,7 +39,14 @@
                 </div>
                 <h1 style="margin-top: 50px;">Transaction History</h1>
                 <div class="textbox" style="border:none">  
-                    <span style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Amount</span><span  style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Type</span><span  style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Date</span>
+                    <span style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Amount</span>
+                    <span  style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Type</span>
+                    <span  style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Date</span>
+<!--                     
+                    <span style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Amount</span>
+                    <span  style="mar gin-right:80px;font-size:18px; border-bottom:2px gold solid">Type</span>
+                    <span  style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Date</span> -->
+                    
                 </div>
         </form>
     </div>

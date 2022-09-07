@@ -23,10 +23,12 @@ router.get("/user/setting", appControllers.userPageSettingGet);
 router.get('/user/search', appControllers.userPageSearchGet);
 router.post('/user/search', appControllers.userPageSearchPost);
 router.get('/user/account', appControllers.userPageAccountGet);
+router.post('/user/account', appControllers.userPageAccountPost);
 router.get('/user/package', appControllers.userPagePackageGet);
 router.post('/user/package', appControllers.userPagePackagePost);
 router.get('/user/payment', appControllers.userPagePaymentGet);
 router.post('/user/payment', appControllers.userPagePaymentPost);
+
 
 //user search
 // router.get('/user/search', appControllers.userSearchGet);

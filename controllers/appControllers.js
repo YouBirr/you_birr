@@ -1,6 +1,9 @@
 const mongoose=require("mongoose");
 const User = require("../models/User");
 const Creator = require("../models/Creator");
+const Transaction = require("../models/Transaction");
+const Deposit = require("../models/Deposit");
+const Withdraw = require("../models/Withdraw");
 const axios = require("axios");
 const dotenv = require("dotenv");
 const request = require("request")
@@ -216,7 +219,7 @@ module.exports.userPageAccountGet = async (req,res) =>{
   const cookie = req.cookies.username;
   const user = await User.findOne({username:cookie});
   if(cookie){
-      res.render("user/account", {user:user});
+      res.render("user/account", {user:user, error:null, withdrawError:null});
   }
   else{
     res.send("page not found");
@@ -299,11 +302,54 @@ module.exports.userPagePaymentPost = async (req,res) =>{
     });
   }
   else{
+    
     res.redirect("/user");
   }
 
 }
 
+//user page account post
+module.exports.userPageAccountPost = async (req,res) =>{
+  const cookie = req.cookies.username;
+  const user = await User.findOne({username:cookie});
+  if(req.body.paymentIdentifier === "deposit"){
+    const transactionNum = req.body.transactionNum;
+    const transaction = await Transaction.findOne({transactionNumber:transactionNum})
+    if(transaction && !(transaction.confirmed)){
+     user.balance += transaction.amount;
+     transaction.confirmed = true;
+     const deposit = new Deposit({username:user.username, amount:transaction.amount});
+     await user.save();
+     await transaction.save();
+     await deposit.save();
+     console.log(deposit);
+     res.render("user/account", {user:user, error:null});
+    }
+    else if(transaction && transaction.confirmed){
+     res.render("user/account", {user:user, error:"duplication", withdrawError:null})
+    }
+    else{
+      res.render("user/account", {user:user, error:"inExistence", withdrawError:null})
+    }
+  }
+  else if(req.body.paymentIdentifier === "withdraw"){
+    const amount = Number(req.body.amount);
+    if(user.balance >= amount && Number.isInteger(amount)){
+      user.balance -= amount;
+      const withdraw = new Withdraw({username:user.username, amount:amount});
+      await user.save();
+      await withdraw.save();
+      console.log("withdrawn: " + amount);
+      res.redirect("/user/account")
+    }
+    else if( user.balance < amount && Number.isInteger(amount)){
+      res.render("user/account", {user:user, error:null, withdrawError:"insufficient"})
+    }
+    else{
+      res.render("user/account", {user:user, error:null, withdrawError:"wrongInput"})  
+    }
+  }
+}
 
 
 ////////////////// Creator Signup ////////////////
@@ -397,6 +443,5 @@ module.exports.creatorPagePost = async (req,res) =>{
 module.exports.creatorPageAccountPost = async (req,res) =>{
   const cookie = req.cookies.creatorUsername;
   const creator = await Creator.findOne({username:cookie});
-  const action = req.body.formIdentifier; 
-   
+  const action = req.body.formIdentifier;   
 }
