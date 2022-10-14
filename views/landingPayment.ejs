@@ -1,0 +1,23 @@
+<%- include ("./partials/header") -%> 
+   <div class="paymentWrapper" style="height:100vh; background-color: #191919;">
+     <div class="payment">
+             <h1 style="color:white; text-align:center; margin-bottom:30px">Donate with telebirr</h1>
+             <form method="post" action="/landingPayment">
+               <input type="hidden" name="paymentIdentifier" value="telebirr">
+                   <div class="textbox">  
+                    <input type="text" required  placeholder="transaction number" name="transactionNum">
+                   </div>  
+                    <% if(error && error === "duplication"){ %>
+                    <p class="signup-error">This transaction number has already been used.</p>
+                    <%} else if(error && error === "inExistence"){ %>
+                    <p class="signup-error">This transaction number doesn't exist.</p>
+                    <%} %> 
+                   <div class="textbox">  
+                    <input required type="number" placeholder="phonenumber" name="phoneNumber"/>
+                  </div>  
+                   <button class="btn" type="submit">Donate</button>
+              </form>
+     </div>
+    </div>
+  </div>
+</body>
