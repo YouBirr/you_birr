@@ -1,0 +1,31 @@
+<%- include ("../partials/header") -%>
+<%- include ("./creatorPage") -%>
+
+    <div class='setting'>
+        <form action="/creator/setting" method="post">
+
+            <input type="hidden" required name="paymentIdentifier" value="withdraw">
+            <div class="textbox">  
+            <input type="text" required placeholder="Package Title" name="title" value="">
+            </div>     
+            <textarea name="description" required class="shareCaption" cols="50" rows="5">Caption</textarea>
+            <div class="textbox">  
+                <input type="number" required placeholder="price" name="price" value="">
+            </div>                                           
+            <button class="btn" type="submit">Save</button>
+        </form>
+
+        <div class="packageDisplay">
+            <div class="searchResult">
+                <div class="searchProfile">
+                    <img class="sidebarProfilePicture" alt="" src="teda6.jpg" >
+                    <h3> <%= package?.title %> </h3>
+                    <span class="sidebarUserName" style="font-size:18px"> <%= package?.price %> Birr </span>
+                </div>
+                <p> <%= package?.desc %> </p>
+           </div>
+          
+        </div>
+    </div>
+</div>
+</div>

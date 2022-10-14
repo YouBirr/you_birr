@@ -1,0 +1,38 @@
+<%- include ("./partials/header") -%> 
+<%- include ("./user/userPage") -%>
+
+<div class="packagePageContainer">
+    <div class="packageTop">
+        <% if(package) {%>
+        <div class="profileCover">
+            <img src="/images/flower.jpg" alt="" class="profileCoverImg">
+            <img src="/images/yellow.png" alt="" class="profileUserImg">
+        </div>
+        <div class="profileInfo">
+            <h4 class="profileInfoName"><%= creator.username %></h4>
+        </div>
+    </div>
+    <div class="packageBottom">
+        <div class="searchResults">
+            <div class="searchResult package">
+                <% if(error) {%>
+                    <p class="signup-error" style="color:red"><%= error%></p>
+                    <%}%>
+                    <div class="packageWrapper">
+                        <div class="searchProfile">
+                            <h2><%= package.title %></h2>
+                            <span class="profileInfoDesc"><%= package.price %> Birr</span>
+                            
+                        </div>
+                        <p> <%= package.desc %> </p>
+                        <form method="post" action="/user/package"> 
+                        <input type="hidden" name="packageIdentifier" value=<%= package._id  %>>
+                       <button type="submit" class="subscribeBtn">take</button>
+                   </form>
+                </div>
+            </div> 
+        </div>
+    </d iv>
+    <%}%>
+    
+</div>

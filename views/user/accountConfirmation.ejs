@@ -1,0 +1,19 @@
+<%- include("../partials/header") -%> 
+<div class="confirmationWrapper">
+    <form action="/accountConfirmation" method="post">
+        <div class="Sign-Upbox">
+            <h1>Confirm Account</h1>
+            <p>We have sent an SMS to the phone number you entered.</p>
+            <div class="textbox">
+            <input type="text" placeholder="confirmation code" name="code"/>
+            <input type="hidden" name="confirmationIdentifier" value=<%= tempName %> />
+            </div>
+            <% if(confirmationError){ %>
+                <p class="signup-error">wrong code, <%= `${5-errorCounter} trial remaining.` %></p>
+            <% } %>
+            <button class="btn" type="submit"><a href="userPage" class="confirmation-btn" >Confirm</a></button>
+        </div>
+    </form>    
+</div>
+</body>
+</html>

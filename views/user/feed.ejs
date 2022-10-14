@@ -1,0 +1,43 @@
+<%- include("../partials/header") -%> 
+<%- include("./userPage") -%> 
+<div class="searchWrapper">
+    <form action="/user" method="post">
+        <input type="hidden" name="formIdentifier" value="search"/>
+        <input type="text" placeholder="find creators" class="creator-search" name="creatorSearched"/>
+        <button class="searchBtn" type="submit"><i class="fa-sharp fa-solid fa-magnifying-glass searchLink"></i></button>
+    </form>
+</div>
+<% for(let p = (post.length)-1; p>=0; p--) { %>
+<div class="feed">
+        <div class="post">
+            <div class="postWrapper">
+                <div class="postTop">
+                    <div class="postTopLeft">
+                        <img alt="" src="/images/manGlass.jpg" class="postProfileImg"/>
+                        <span class="postUsername"><%= post[p].creator %></span>
+                        <span class="postDate"><%= format(post[p].createdAt) %></span>
+                    </div>
+                </div>
+                <div class="postCenter">
+                    <span class="postText"><%=post[p].desc%></span>
+                    <div style="margin-top:20px">
+                        <iframe width="835" height="500" title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture s" allowfullscreen src=<%= post[p].link %> ></iframe>
+                    </div>
+                
+                </div>  
+                <div class="postBottom">
+                     <div class="postBottomLeft">
+                        <img src="/images/yellow.png" alt="" class="likeIcon"/>
+                        <img src="/images/yellow.png" alt="" class="likeIcon"/>
+                        <span class="postLikeCounter">12 people liked so far</span>
+                     </div>
+                     <div class="postBottomRight">
+                        <span class="postCommentText">1 comments</span>
+                     </div>
+                </div>
+            </div>    
+        </div>
+</div>
+<%}%>
+</div>
+</div>

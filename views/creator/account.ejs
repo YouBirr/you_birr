@@ -1,0 +1,30 @@
+<%- include("../partials/header") -%> 
+<%- include("./creatorPage") -%> 
+<div class="paymentWrapper">
+  <div class="payment">
+        <h1 style="margin-top:40px">Withdraw</h1>
+        <form method="post" action="/creator/account">
+          <input type="hidden" name="paymentIdentifier" value="withdraw">
+          <div class="textbox">  
+          <input type="number" required placeholder="Amount" name="amount" value="">
+          </div>
+          <% if(withdrawError && withdrawError === "insufficient"){ %>
+            <p class="signup-error">Your balance is insufficient for this service.</p>
+          <%}%>             
+         <button class="btn" type="submit">Withdraw</button>
+  </form>
+  </div>
+  <div class="payment">
+          <h1>Balance</h1>
+                <div class="textbox">  
+                  <p style="font-size:18px"> Your remaining balance is: <%=creator.balance %></p>
+                </div>
+                <h1 style="margin-top: 50px;">Transaction History</h1>
+                <div class="textbox" style="border:none">  
+                    <span style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Amount</span><span  style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Type</span><span  style="margin-right:80px;font-size:18px; border-bottom:2px gold solid">Date</span>
+                </div>
+    </div>
+</div>
+    </div>
+</div>
+</body>

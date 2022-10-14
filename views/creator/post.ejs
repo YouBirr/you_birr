@@ -1,0 +1,68 @@
+<%- include ("../partials/header") -%>
+<%- include ("./creatorPage") -%>
+<div class='share'>
+    <div class="shareLeft">
+            <% for(let p = (post.length)-1; p>=0; p--) { %>
+                <% if(post[p].link){ %>
+                <div class="creatorFeed">
+                    <div class="creatorPost">
+                        <div class="postWrapper">
+                            <div class="postTop">
+                                <div class="postTopLeft">
+                                    <img alt="" src="/images/manGlass.jpg" class="postProfileImg"/>
+                                    <span class="postUsername"><%= creator.username %></span>
+                                    <span class="postDate"><%= format(post[p].createdAt) %></span>
+                                </div>
+                                <div class="postTopRight">
+                                    <form action="/creator" method="post">
+                                        <input type="hidden" name="formIdentifier" value="deletePost">
+                                        <input type="hidden" name="postId" value=<%= post[p].postId %>>
+            
+                                        <button type="submit" style="cursor: pointer; background-color:rgb(36, 35, 35); border: none;">
+                                            <i class="fa-solid fa-trash" style="cursor: pointer; font-size: 20px; color: aliceblue;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="postCenter">
+                            <span class="postText"><%=post[p].desc%></span>
+                            <iframe width="480" height="315" title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture s" allowfullscreen src=<%= post[p].link %> ></iframe>
+                            </div>  
+                            <div class="postBottom">
+                                 <div class="postBottomLeft">
+                                    <img src="/images/yellow.png" alt="" class="likeIcon"/>
+                                    <img src="/images/yellow.png" alt="" class="likeIcon"/>
+                                    <span class="postLikeCounter">12 people liked so far</span>
+                                 </div>
+                                 <div class="postBottomRight">
+                                    <span class="postCommentText">1 comments</span>
+                                 </div>
+                            </div>
+                        </div>    
+                    </div>
+            </div>
+            <%}%>
+            
+            <%}%>
+        </div>               
+        
+    <div class="shareRight">
+        <div class="shareWrapper">
+            <form action="/creator" method="post">
+                <input type="hidden" name="formIdentifier" value="post">
+                <div class="shareTop">
+                    <img src="/assets/yellow.png" class="shareProfileImg" alt="" />
+                    <input type="text" class="shareInputLink" placeholder="Youtube link" name="link"/>    
+                </div>
+                <textarea name="caption" class="shareCaption" cols="50" rows="5">Caption</textarea>
+                <div class="shareBottom">
+                    <div class="shareOptions">
+                    </div>
+                    <button class="shareButton">Share</button>
+                </div>
+            </form>
+        </div> 
+    </div>
+</div>
+</div>
+</div>

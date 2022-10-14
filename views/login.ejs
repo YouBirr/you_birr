@@ -1,0 +1,18 @@
+<%- include("partials/header") -%> 
+    <div class="loginWrapper">
+        <form class="login-box" action="login" method="post">
+            <h1>Log-in</h1>
+            <div class="textbox">  
+                <input type="text" required placeholder="Username" name="username"/>
+            </div>
+            <div class="textbox">
+                <input type="password" required placeholder="password"  name="password"/>
+            </div>
+            <% if(error){ %>
+                <p class="signup-error"><%=error%></p>
+            <%} %>
+            <button type="submit" class="btn">Log In</button>
+    </form>
+    </div>
+</body>
+</html>

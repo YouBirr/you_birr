@@ -1,0 +1,27 @@
+<%- include("../partials/header") -%> 
+<div class="user-page">
+    <div class="sidebar">
+        <div class="userProfile">
+            <img class="sidebarProfilePicture" alt="" src="/images/manCamera.jpg" >
+            <span class="sidebarUserName"><%= user.username %></span>
+        </div>
+    <div class="sidebarActions">
+       <form class="sidebarForm" action="/user" method="post">
+        <input type="hidden" name="userIdentifier" value=<%= user.username %>>
+         <input type="hidden" name="formIdentifier" value="feed">
+         <button class="sidebarBtn" type="submit"><a class="sidebarLink">Feed</a></button>
+       </form>
+       <form class="sidebarForm" action="/user" method="post">   
+        <input type="hidden" name="userIdentifier" value=<%= user.username %>>  
+        <input type="hidden" name="formIdentifier" value="setting">
+         <button class="sidebarBtn" type="submit"><a class="sidebarLink">Setting</a></button>
+       </form>
+       <form class="sidebarForm" action="/user" method="post">
+        <input type="hidden" name="userIdentifier" value=<%= user.username %>>
+        <input type="hidden" name="formIdentifier" value="account">
+        <button class="sidebarBtn" type="submit"><a class="sidebarLink">Account</a></button>
+       </form>
+   </div>
+    </div>
+    <div class="userPageRight">
+        

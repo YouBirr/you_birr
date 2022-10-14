@@ -1,0 +1,28 @@
+<%- include("../partials/header") -%> 
+<%- include("./userPage") -%> 
+<div class="searchWrapper">
+  <form action="/user" method="post">
+      <input type="hidden" name="formIdentifier" value="search">
+      <input type="text" placeholder="find creators" class="creator-search">
+      <button class="searchBtn" type="submit"><i class="fa-sharp fa-solid fa-magnifying-glass searchLink"></i></button>
+  </form>
+</div>
+        <div class="searchResults">
+            <% if(creator) {%>
+                <div class="searchResult">
+                    <div class="searchProfile">
+                        <img class="sidebarProfilePicture" alt="" src=<%= %> >
+                        <span class="searchedName"><%= creator.username%></span>
+                    </div>
+                    <!-- <p>when I start from the 2 questions youBirr means<br> youtube Birr the name was driven <br>unconditionally but when we think it over it seems that <br>we get the exact name for the website. because <br>most of the video creators out there </p> -->
+                    <form method="post" action="/user/search"> 
+                        <input type="hidden" name="searchCreatorIdentifier" value=<%=creator.username %>>
+                        <button type="submit" class="subscribeBtn">subscribe</button>
+                    </form>
+                </div>
+            <%}%>
+        </div>
+    </div>
+  </div>
+</div>
+</body>
